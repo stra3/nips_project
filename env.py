@@ -11,6 +11,7 @@ class Env():
         self.observation_spacelow = self.env.observation_space.low[2]
         self.observation_spacehigh = self.env.observation_space.high[2]
         self.actionspace = self.env.action_space.n
+        
     def step(self, action):
         return self.env.step(action)
 
