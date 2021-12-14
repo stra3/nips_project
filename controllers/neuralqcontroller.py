@@ -3,31 +3,11 @@ import math
 from sklearn.preprocessing import KBinsDiscretizer
 from typing import Tuple
 import numpy as np
-import torch
-import torch.nn as nn
+from keras.models import Sequential
+from keras.layers import InputLayer
+from keras.layers import Dense, Activation, Flatten
 # import torchvision.transforms as transforms
 # import torchvision.datasets as dsets
-
-class FeedforwardNeuralNetModel(nn.Module):
-    def __init__(self, input_dim, hidden_dim, output_dim):
-        super(FeedforwardNeuralNetModel, self).__init__()
-        # Linear function
-        self.fc1 = nn.Linear(input_dim, hidden_dim) 
-        # Non-linearity
-        self.tanh = nn.Tanh()
-        # Linear function (readout)
-        self.fc2 = nn.Linear(hidden_dim, output_dim)  
-
-    def forward(self, x):
-        # Linear function
-        out = self.fc1(x)
-        # Non-linearity
-        out = self.tanh(out)
-        # Linear function (readout)
-        out = self.fc2(out)
-        output = torch.sigmoid(out,)
-
-        return output
 
 class Neuralqcontroller(controllers.controller.Controller):
     
@@ -36,17 +16,16 @@ class Neuralqcontroller(controllers.controller.Controller):
     """
     def __init__(self, env):
         self.env = env
-        input_dim = 4
-        hidden_dim = 100
-        output_dim = 1
-        self.model = FeedforwardNeuralNetModel(input_dim, hidden_dim, output_dim)
-   
-        self.criterion = nn.CrossEntropyLoss()
+        self.model = self.create_model()
+    
+    def create_model(self):
+        model = Sequential()
+        model.add(Flatten(input_shape=(1,) + self.env.env.observation_space.shape))
+        model.add(Dense(20, activation='relu'))
+        model.add(Dense(self.env.env.action_space.n, activation='linear'))
+        model.compile(loss='mse', optimizer='adam', metrics=['mae'])
 
-        learning_rate = 0.1
-
-        self.optimizer = torch.optim.SGD(self.model.parameters(), lr=learning_rate)
-        
+        return model
 
     def policy(self, state : tuple ):
         """Choosing action based on epsilon-greedy policy"""
@@ -74,8 +53,7 @@ class Neuralqcontroller(controllers.controller.Controller):
             self.action = np.random.randint(2) # explore 
         # policy action
         else:
-            prediction = self.model(torch.Tensor(obs))
-            self.action = round(prediction.item()) # exploit
+            action = np.argmax(self.model.predict(np.identity(self.env.env.observation_space.shape)[obs:obs + 1])) # exploit
         
         return self.action
     
