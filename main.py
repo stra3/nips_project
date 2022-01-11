@@ -1,4 +1,5 @@
 from controllers.deepqcontroller import Deepqcontroller
+from controllers.dqncontroller import Dqncontroller
 from controllers.neuralqcontroller import Neuralqcontroller
 from controllers.qcontroller import Qcontroller
 from controllers.controller import Controller
@@ -10,11 +11,14 @@ import matplotlib.pyplot as plt
 if __name__ == '__main__':
     
     # env = Env('CartPole-v1')
-    env = gym.make('MountainCar-v0')  #specify environment to use
+    # env = gym.make('MountainCar-v0')  #specify environment to use
+    env = gym.make('CartPole-v1')
     control = Deepqcontroller(env)  #specify controller to use
+    control = Dqncontroller(env)
+    print("wiehoeee")
     
     #Pick rendering preferences
-    train_render = False    
+    train_render = True    
     test_render = False
 
     #Pick number of runs for train and test
@@ -33,7 +37,7 @@ if __name__ == '__main__':
                 env.render()
             action = control.generateAction(obs, e)
             obs, reward ,done,_ = env.step(action)
-            control.update_q_values(e, obs, reward, done)
+            # control.update_q_values(e, obs, reward, done)
             # control.updateQtable(e, reward, obs)
         
         if  e % test_intervals == 0:
