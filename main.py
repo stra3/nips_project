@@ -14,8 +14,6 @@ if __name__ == '__main__':
     # env = gym.make('MountainCar-v0')  #specify environment to use
     env = gym.make('CartPole-v1')
     control = Deepqcontroller(env)  #specify controller to use
-    control = Dqncontroller(env)
-    print("wiehoeee")
     
     #Pick rendering preferences
     train_render = True    
