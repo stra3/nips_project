@@ -5,9 +5,9 @@ from sklearn.preprocessing import KBinsDiscretizer
 from typing import Tuple
 import numpy as np
 import tensorflow as tf
-from keras.models import Sequential
-from keras.layers import InputLayer
-from keras.layers import Dense, Activation, Flatten
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import InputLayer
+from tensorflow.keras.layers import Dense, Activation, Flatten
 from collections import deque
 
 class Deepqcontroller(controllers.controller.Controller):
@@ -30,6 +30,8 @@ class Deepqcontroller(controllers.controller.Controller):
 
         self.action = None
         self.obs = None
+
+        self.name="deepq"
 
 
     def create_model(self):
@@ -130,12 +132,3 @@ class Deepqcontroller(controllers.controller.Controller):
     def exploration_rate(self, n : int, min_rate= 0.01 ) -> float :
         """Decaying exploration rate"""
         return max(min_rate, min(1, 1.0 - math.log10((n  + 1) / 25)))
-
-
-    
-    def updateQtable(self, e, reward, obs):
-        new_state = self.discretizer(*obs)
-        lr = self.learning_rate(e)
-        learnt_value = self.new_Q_value(reward , new_state )
-        old_value = self.Q_table[self.current_state][self.action]
-        self.Q_table[self.current_state][self.action] = (1-lr)*old_value + lr*learnt_value     
