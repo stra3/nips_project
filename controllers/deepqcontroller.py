@@ -33,6 +33,11 @@ class Deepqcontroller(controllers.controller.Controller):
 
         self.name="deepq"
 
+        # gpu_options = tf.GPUoptions(per_Process_gpu_memory_fraction=0.1)
+        # sess = tf.Session(config=tf.ConfigProto(gpu_options=gpu_options))
+
+
+
 
     def create_model(self):
             """ The agent maps X-states to Y-actions

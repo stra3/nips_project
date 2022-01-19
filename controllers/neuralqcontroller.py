@@ -3,9 +3,9 @@ import math
 from sklearn.preprocessing import KBinsDiscretizer
 from typing import Tuple
 import numpy as np
-from keras.models import Sequential
-from keras.layers import InputLayer
-from keras.layers import Dense, Activation, Flatten
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import InputLayer
+from tensorflow.keras.layers import Dense, Activation, Flatten
 # import torchvision.transforms as transforms
 # import torchvision.datasets as dsets
 
@@ -24,6 +24,7 @@ class Neuralqcontroller(controllers.controller.Controller):
         model.add(Dense(20, activation='relu'))
         model.add(Dense(self.env.env.action_space.n, activation='linear'))
         model.compile(loss='mse', optimizer='adam', metrics=['mae'])
+        sess = tf.Session(config=tf.ConfigProto(log_device_placement=True))
 
         return model
 

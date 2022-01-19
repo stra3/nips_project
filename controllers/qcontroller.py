@@ -12,10 +12,11 @@ class Qcontroller(controllers.controller.Controller):
     def __init__(self, env):
         super().__init__()
         self.n_bins = ( 6 , 12 )
-        self.lower_bounds = [ env.observation_spacelow, -math.radians(50) ]
-        self.upper_bounds = [ env.observation_spacehigh, math.radians(50) ]
-        self.Q_table = np.zeros(self.n_bins + (env.actionspace,))
+        self.lower_bounds = [ env.observation_space.low[2], -math.radians(50) ]
+        self.upper_bounds = [ env.observation_space.high[2], math.radians(50) ]
+        self.Q_table = np.zeros(self.n_bins + (env.action_space.n,))
         self.env = env
+        self.name = "regq"
 
     def discretizer(self, _ , __ , angle, pole_velocity ) -> Tuple[int,...]:
         """Convert continues state intro a discrete state"""
