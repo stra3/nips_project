@@ -52,7 +52,7 @@ class Qcontroller(controllers.controller.Controller):
         
         # insert random action
         if np.random.random() < self.exploration_rate(e) : 
-            self.action = np.random.randint(2) # explore 
+            self.action = self.env.action_space.sample() # explore 
         
         return self.action
     

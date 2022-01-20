@@ -19,12 +19,12 @@ if __name__ == '__main__':
     run_name = f"base-regq{int(time.time())}"
 
     #specify environment to use
-    # env = gym.make('LunarLander-v2')  
-    env = gym.make('CartPole-v1')
+    env = gym.make('LunarLander-v2')  
+    # env = gym.make('CartPole-v1')
 
     #specify controller to use
-    control = Randomcontroller(env)
-    # control = Qcontroller(env)
+    # control = Randomcontroller(env)
+    control = Qcontroller(env)
     # control = Deepqcontroller(env)  
     
     #Pick rendering preferences
